@@ -14,7 +14,12 @@ final class StorageService {
         let schema = Schema([
             NoteItem.self,
             HighlightItem.self,
-            MemorizationCardItem.self
+            MemorizationCardItem.self,
+            BookmarkItem.self,
+            CollectionItem.self,
+            ReadingHistoryItem.self,
+            StreakItem.self,
+            QuizAttempt.self
         ])
         
         let modelConfiguration = ModelConfiguration(
@@ -150,3 +155,86 @@ final class MemorizationCardItem {
         self.repetitions = 0
     }
 }
+
+    
+    // MARK: - Bookmarks
+    
+    func saveBookmark(_ bookmark: BookmarkItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.insert(bookmark)
+        try context.save()
+    }
+    
+    func fetchBookmarks() throws -> [BookmarkItem] {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        let descriptor = FetchDescriptor<BookmarkItem>(sortBy: [SortDescriptor(\.dateCreated, order: .reverse)])
+        return try context.fetch(descriptor)
+    }
+    
+    func deleteBookmark(_ bookmark: BookmarkItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.delete(bookmark)
+        try context.save()
+    }
+    
+    // MARK: - Collections
+    
+    func saveCollection(_ collection: CollectionItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.insert(collection)
+        try context.save()
+    }
+    
+    func fetchCollections() throws -> [CollectionItem] {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        let descriptor = FetchDescriptor<CollectionItem>(sortBy: [SortDescriptor(\.dateCreated, order: .reverse)])
+        return try context.fetch(descriptor)
+    }
+    
+    func deleteCollection(_ collection: CollectionItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.delete(collection)
+        try context.save()
+    }
+    
+    // MARK: - Reading History
+    
+    func saveReadingHistory(_ history: ReadingHistoryItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.insert(history)
+        try context.save()
+    }
+    
+    func fetchReadingHistory() throws -> [ReadingHistoryItem] {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        let descriptor = FetchDescriptor<ReadingHistoryItem>(sortBy: [SortDescriptor(\.dateRead, order: .reverse)])
+        return try context.fetch(descriptor)
+    }
+    
+    // MARK: - Streak
+    
+    func saveStreak(_ streak: StreakItem) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.insert(streak)
+        try context.save()
+    }
+    
+    func fetchStreak() throws -> StreakItem? {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        let descriptor = FetchDescriptor<StreakItem>()
+        return try context.fetch(descriptor).first
+    }
+    
+    // MARK: - Quiz Attempts
+    
+    func saveQuizAttempt(_ attempt: QuizAttempt) throws {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        context.insert(attempt)
+        try context.save()
+    }
+    
+    func fetchQuizAttempts() throws -> [QuizAttempt] {
+        guard let context = modelContext else { throw StorageError.notConfigured }
+        let descriptor = FetchDescriptor<QuizAttempt>(sortBy: [SortDescriptor(\.attemptDate, order: .reverse)])
+        return try context.fetch(descriptor)
+    }
