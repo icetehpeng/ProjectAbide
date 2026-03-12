@@ -221,3 +221,4 @@ For issues, questions, or suggestions, please open an issue on GitHub.
 ---
 
 **Made with ❤️ for Bible study and spiritual growth**
+MIT
